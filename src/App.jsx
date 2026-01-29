@@ -315,7 +315,7 @@ function App() {
             <a href="#" className="social-icon"><i className="fab fa-facebook-f"></i></a>
             <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" className="social-icon"><i className="fab fa-youtube"></i></a>
             </div>
-            <p style={{ color: '#666', fontSize:'0.9rem' }}>&copy; 2025 Mr Rinku Infra. All rights reserved.</p>
+            <p style={{ color: '#666', fontSize:'0.9rem' }}>&copy; 2026 AR Infotech. All rights reserved.</p>
         </div>
       </footer>
     </div>
