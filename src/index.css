@@ -23,17 +23,92 @@ h1, h2, h3, h4 { text-transform: uppercase; letter-spacing: 1px; font-family: 'R
 a { text-decoration: none; color: inherit; transition: 0.3s; }
 .section-padding { padding: 100px 6%; }
 
-/* --- THE REVEAL ANIMATION --- */
+/* --- 1. NAVBAR HOVER ANIMATION --- */
+.nav-link {
+  position: relative;
+  font-weight: 600;
+  color: #ccc;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  padding: 5px 0;
+}
+.nav-link:hover { color: #fff; }
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+.nav-link:hover::after { width: 100%; }
+
+/* --- 2. SCROLL REVEAL ANIMATION --- */
 .reveal {
   opacity: 0;
   transform: translateY(50px);
   transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
 }
+.reveal.active { opacity: 1; transform: translateY(0); }
 
-.reveal.active {
-  opacity: 1;
-  transform: translateY(0);
+/* --- 3. FORM ANIMATION (Floating Labels) --- */
+.input-group { position: relative; margin-bottom: 30px; }
+
+.form-input {
+  width: 100%;
+  padding: 15px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #333;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s;
 }
+
+.form-label {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  color: #666;
+  pointer-events: none;
+  transition: 0.3s ease all;
+}
+
+/* Magic: When input is focused OR has text, move label up */
+.form-input:focus, .form-input:not(:placeholder-shown) {
+  border-bottom-color: var(--primary);
+}
+.form-input:focus ~ .form-label,
+.form-input:not(:placeholder-shown) ~ .form-label {
+  top: -10px;
+  font-size: 0.8rem;
+  color: var(--primary);
+}
+
+/* --- 4. SOCIAL ICONS ANIMATION --- */
+.social-icon {
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex; justify-content: center; align-items: center;
+  font-size: 1.5rem; color: #fff;
+  background: rgba(255,255,255,0.05);
+  transition: all 0.3s ease;
+}
+.social-icon:hover {
+  transform: translateY(-5px) scale(1.1);
+  background: var(--primary);
+  color: #000;
+  box-shadow: 0 0 20px rgba(255, 123, 0, 0.5);
+  border-color: var(--primary);
+}
+
+/* --- 5. BUTTON HOVER --- */
+.btn-primary { transition: 0.3s; }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255, 123, 0, 0.3); }
 
 /* Mobile Responsive Tweaks */
 @media (max-width: 992px) {
