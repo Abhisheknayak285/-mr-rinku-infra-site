@@ -42,7 +42,6 @@ function App() {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && !hasStarted) {
         setHasStarted(true);
-        // Start counting
         const duration = 2000;
         const steps = 50;
         const intervalTime = duration / steps;
@@ -51,7 +50,6 @@ function App() {
         const timer = setInterval(() => {
           currentStep++;
           const progress = currentStep / steps;
-          
           setCounts({
             subs: Math.floor(progress * 42200),
             views: Math.floor(progress * 12000000),
@@ -69,7 +67,6 @@ function App() {
     return () => observer.disconnect();
   }, [hasStarted]);
 
-  // Helper to format numbers
   const formatNumber = (num) => {
     if (num >= 1000000) return (num / 1000000).toFixed(0) + 'M+';
     if (num >= 1000) return (num / 1000).toFixed(0) + 'K+';
@@ -85,8 +82,8 @@ function App() {
         background: 'var(--glass)', borderBottom: '1px solid var(--border-light)'
       }}>
         <div style={{ fontSize: '1.5rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* REPLACE PROFILE PIC URL BELOW */}
-          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100" alt="Profile" style={{width:'45px', height:'45px', borderRadius:'50%', border:'2px solid var(--primary)', objectFit:'cover'}} />
+          {/* YOUR DP IS HERE */}
+          <img src="https://uploads.onecompiler.io/43d4xt63k/43d7tx2r5/high-1734409463.jpg" alt="Profile" style={{width:'45px', height:'45px', borderRadius:'50%', border:'2px solid var(--primary)', objectFit:'cover'}} />
           MR RINKU <span style={{ color: 'var(--secondary)' }}>INFRA</span>
         </div>
         <div className="nav-links" style={{ display: 'flex', gap: '30px' }}>
@@ -120,7 +117,7 @@ function App() {
           </div>
         </div>
 
-        {/* STATS (Animated Reveal) */}
+        {/* STATS */}
         <div ref={statsRef} className="stats-container reveal" style={{
           position: 'absolute', bottom: 0, right: 0, background: 'rgba(10,10,15,0.9)', 
           padding: '35px 50px', display: 'flex', gap: '60px', borderTopLeftRadius: '20px', border: '1px solid var(--border-light)'
@@ -150,7 +147,6 @@ function App() {
         </div>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
-          {/* Card 1 */}
           <div className="project-card reveal">
             <div style={{position:'relative', paddingTop:'56.25%', background:'#000'}}>
                 <iframe style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}} src="https://www.youtube.com/embed/0tSJHoVyCX4" title="Video" frameBorder="0" allowFullScreen></iframe>
@@ -163,7 +159,6 @@ function App() {
               </div>
             </div>
           </div>
-          {/* Card 2 */}
           <div className="project-card reveal" style={{ transitionDelay:'0.2s' }}>
             <div style={{position:'relative', paddingTop:'56.25%', background:'#000'}}>
                 <iframe style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}} src="https://www.youtube.com/embed/b11waIBNxto" title="Video" frameBorder="0" allowFullScreen></iframe>
@@ -176,7 +171,6 @@ function App() {
               </div>
             </div>
           </div>
-           {/* Card 3 */}
            <div className="project-card reveal" style={{ transitionDelay:'0.4s' }}>
             <div style={{position:'relative', paddingTop:'56.25%', background:'#000'}}>
                 <iframe style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}} src="https://www.youtube.com/embed/oremyVh0eLk" title="Video" frameBorder="0" allowFullScreen></iframe>
@@ -192,7 +186,7 @@ function App() {
         </div>
       </section>
 
-      {/* SERIES SECTION (With Reveal) */}
+      {/* SERIES SECTION */}
       <section id="series" className="section-padding" style={{background:'#08090b', borderTop:'1px solid var(--border-light)', borderBottom:'1px solid var(--border-light)'}}>
         <h2 className="reveal" style={{ fontSize: '2.8rem', marginBottom: '10px' }}>Video <span style={{ color: 'var(--primary)' }}>Playlists</span></h2>
         <p className="reveal" style={{color:'#94a3b8', marginBottom:'50px'}}>Watch my full series on these topics.</p>
@@ -237,8 +231,8 @@ function App() {
       {/* ABOUT SECTION */}
       <section id="about" className="section-padding reveal" style={{ display: 'flex', flexWrap: 'wrap', gap: '60px', alignItems: 'center', background: 'linear-gradient(90deg, #030305 0%, #08090b 100%)' }}>
         <div style={{ flex: 1, minWidth: '300px' }}>
-          {/* REPLACE WITH YOUR ACTION PHOTO */}
-          <img src="https://uploads.onecompiler.io/43d4xt63k/43d7tx2r5/high-1734409463.jpg" alt="Rinku" style={{ width: '100%', borderRadius: '8px', border: '1px solid var(--border-light)', height:'500px', objectFit:'cover', filter:'grayscale(20%)', transition:'0.4s' }} />
+          {/* ABOUT ME PHOTO: USING YOUR BACKGROUND IMAGE AS A PLACEHOLDER FOR NOW */}
+          <img src="https://uploads.onecompiler.io/43d4xt63k/44bzks3xk/PHOTO-2026-01-29-14-17-43.jpg" alt="Rinku" style={{ width: '100%', borderRadius: '8px', border: '1px solid var(--border-light)', height:'500px', objectFit:'cover', filter:'grayscale(20%)', transition:'0.4s' }} />
         </div>
         <div style={{ flex: 1.2, minWidth: '300px' }}>
           <span style={{ color: 'var(--primary)', fontWeight: '700', letterSpacing:'2px', fontSize:'0.8rem', textTransform:'uppercase' }}>ABOUT ME</span>
@@ -257,7 +251,7 @@ function App() {
         </div>
       </section>
 
-      {/* CONTACT SECTION (With Form Animation) */}
+      {/* CONTACT SECTION */}
       <section id="contact" className="section-padding reveal">
         <div className="contact-wrapper" style={{display:'grid', gridTemplateColumns: window.innerWidth > 992 ? '1fr 1fr' : '1fr', gap:'80px', alignItems:'center'}}>
             <div>
@@ -314,7 +308,7 @@ function App() {
             <a href="#" className="social-icon"><i className="fab fa-facebook-f"></i></a>
             <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" className="social-icon"><i className="fab fa-youtube"></i></a>
             </div>
-            <p style={{ color: '#666', fontSize:'0.9rem' }}>&copy; 2026 AR InfoTech. All rights reserved.</p>
+            <p style={{ color: '#666', fontSize:'0.9rem' }}>&copy; 2025 Mr Rinku Infra. All rights reserved.</p>
         </div>
       </footer>
     </div>
