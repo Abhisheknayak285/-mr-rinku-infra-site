@@ -1,13 +1,13 @@
 :root {
-  --bg-dark: #050505;
-  --bg-panel: #0f1115;
-  --primary: #ff7b00; /* Safety Orange */
-  --secondary: #00f3ff; /* Cyan from your HTML */
+  --bg-dark: #030305;
+  --bg-panel: #0d0e12;
+  --primary: #ff7b00;
+  --secondary: #00f0ff;
   --text-main: #ffffff;
-  --text-muted: #9ca3af;
-  --border-light: rgba(255, 255, 255, 0.08);
-  --glass: rgba(15, 17, 21, 0.7);
-  --glass-blur: blur(15px);
+  --text-muted: #94a3b8;
+  --border-light: rgba(255, 255, 255, 0.15);
+  --glass: rgba(5, 5, 8, 0.95);
+  --glass-blur: blur(12px);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,8 +18,13 @@ body {
   background-color: var(--bg-dark);
   color: var(--text-main);
   
-  /* --- EXACT HTML BACKGROUND STYLE --- */
+  /* --- EXACT BACKGROUND MATCH WITH HTML --- */
   background-image: 
+      /* Light effect at top-left */
+      radial-gradient(circle at 15% 50%, rgba(255, 123, 0, 0.04), transparent 25%),
+      /* Blue effect at bottom-right */
+      radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.04), transparent 25%),
+      /* Your background image with a gradient overlay to match the HTML look */
       linear-gradient(135deg, rgba(5,5,5,0.9), rgba(5,5,5,0.4)),
       url('https://uploads.onecompiler.io/43d4xt63k/44bzks3xk/PHOTO-2026-01-29-14-17-43.jpg');
       
@@ -31,75 +36,52 @@ body {
 
 h1, h2, h3, h4 { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
 a { text-decoration: none; color: inherit; transition: 0.3s ease; }
-.section-padding { padding: 120px 10%; }
+.section-padding { padding: 100px 6%; }
 
-/* --- 1. NAVBAR --- */
-.nav-link { position: relative; font-weight: 600; color: #ccc; font-size: 0.9rem; padding: 5px 0; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+/* --- 1. NAVBAR HOVER ANIMATION --- */
+.nav-link { position: relative; font-weight: 600; color: #ccc; font-size: 0.9rem; padding: 5px 0; cursor: pointer; }
 .nav-link:hover { color: #fff; }
-.nav-link::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0%; height: 2px; background: var(--secondary); transition: 0.3s; }
+.nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 2px; background: var(--primary); transition: 0.3s; }
 .nav-link:hover::after { width: 100%; }
 
-/* --- 2. HERO STATS BOX (MATCHING HTML) --- */
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-  padding: 25px 40px;
-  background: var(--glass);
-  border: 1px solid var(--border-light);
-  backdrop-filter: var(--glass-blur);
-  border-radius: 4px;
-  margin-top: 50px;
-  position: relative;
-}
-/* The little blue line on top of the stats box */
-.hero-stats::before {
-  content: ''; position: absolute; top: -1px; left: 20px; width: 40px; height: 2px; background: var(--secondary);
-}
-
-.stat-box h3 { font-size: 2.5rem; line-height: 1; color: #fff; font-weight: 700; }
-.stat-box span { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 5px; }
-
-/* --- 3. REVEAL ANIMATION --- */
-.reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+/* --- 2. REVEAL ANIMATION --- */
+.reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .reveal.active { opacity: 1; transform: translateY(0); }
 
-/* --- 4. PROJECT CARDS --- */
+/* --- 3. CARD HOVER ANIMATION --- */
 .project-card { 
   background: var(--bg-panel); border: 1px solid var(--border-light); 
-  overflow: hidden; position: relative; transition: 0.4s; 
+  overflow: hidden; position: relative; transition: 0.4s; border-radius: 4px; 
 }
 .project-card:hover { 
   transform: translateY(-10px); 
-  border-color: var(--secondary); 
-  box-shadow: 0 10px 40px -10px rgba(0, 243, 255, 0.15);
+  border-color: var(--primary); 
+  box-shadow: 0 10px 40px -10px rgba(255, 123, 0, 0.15);
 }
-.card-body { padding: 25px; position: relative; }
-/* Corner decoration */
+.card-body { position: relative; padding: 25px; }
 .card-body::before { 
-  content: ''; position: absolute; top: 0; right: 0; width: 0; height: 0; 
-  border-style: solid; border-width: 0 30px 30px 0; 
-  border-color: transparent var(--border-light) transparent transparent; 
-  transition: 0.3s;
+  content: ''; position: absolute; top: 0; right: 0; width: 20px; height: 20px; 
+  border-top: 2px solid var(--primary); border-right: 2px solid var(--primary); 
+  opacity: 0; transition: 0.3s; 
 }
-.project-card:hover .card-body::before { border-color: transparent var(--secondary) transparent transparent; }
+.project-card:hover .card-body::before { opacity: 1; }
 
-/* --- 5. FORM STYLES --- */
-.input-group { position: relative; margin-bottom: 30px; }
-.form-input { width: 100%; padding: 15px 0; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; outline: none; transition: 0.3s; }
-.form-label { position: absolute; top: 15px; left: 0; color: #666; pointer-events: none; transition: 0.3s; }
+/* --- 4. FORM ANIMATION --- */
+.input-group { position: relative; margin-bottom: 35px; }
+.form-input { width: 100%; padding: 15px 0; background: transparent; border: none; border-bottom: 1px solid #333; color: #fff; font-size: 1rem; outline: none; transition: 0.3s; font-family: 'Outfit', sans-serif; }
+.form-label { position: absolute; top: 15px; left: 0; color: #666; font-size: 1rem; pointer-events: none; transition: 0.3s; }
 .form-input:focus, .form-input:not(:placeholder-shown) { border-bottom-color: var(--primary); }
-.form-input:focus ~ .form-label, .form-input:not(:placeholder-shown) ~ .form-label { top: -10px; font-size: 0.8rem; color: var(--primary); }
+.form-input:focus ~ .form-label, .form-input:not(:placeholder-shown) ~ .form-label { top: -20px; font-size: 0.8rem; color: var(--primary); }
 
-/* --- 6. SOCIALS --- */
-.social-icon { width: 40px; height: 40px; border: 1px solid #222; display: flex; justify-content: center; align-items: center; border-radius: 50%; color: #666; transition: 0.3s; }
-.social-icon:hover { background: var(--secondary); color: #000; border-color: var(--secondary); }
+/* --- 5. SOCIAL ICONS ANIMATION --- */
+.social-icon { width: 50px; height: 50px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.1); font-size: 1.5rem; color: #fff; transition: 0.3s; }
+.social-icon:hover { transform: scale(1.1); background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 15px rgba(255, 123, 0, 0.5); }
 
-/* Mobile */
+/* Mobile Optimization */
 @media (max-width: 992px) {
-  .hero-content h1 { font-size: 3.5rem !important; }
-  .hero-stats { grid-template-columns: 1fr; gap: 20px; }
-  .contact-wrapper, .about-section { flex-direction: column; }
+  .hero-content h1 { font-size: 3rem !important; }
+  .stats-container { position: relative !important; width: 100% !important; margin-top: 40px; background: rgba(10, 10, 15, 0.95); border-radius: 8px; flex-wrap: wrap; justify-content: center; gap: 30px; }
+  .about-section, .contact-wrapper { flex-direction: column; }
   .nav-links { display: none !important; } 
-  .hero { padding-top: 100px !important; }
+  .hero { padding-top: 120px !important; }
 }
