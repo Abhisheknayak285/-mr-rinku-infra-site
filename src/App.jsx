@@ -238,7 +238,7 @@ function App() {
       <section id="about" className="section-padding reveal" style={{ display: 'flex', flexWrap: 'wrap', gap: '60px', alignItems: 'center', background: 'linear-gradient(90deg, #030305 0%, #08090b 100%)' }}>
         <div style={{ flex: 1, minWidth: '300px' }}>
           {/* REPLACE WITH YOUR ACTION PHOTO */}
-          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780" alt="Rinku" style={{ width: '100%', borderRadius: '8px', border: '1px solid var(--border-light)', height:'500px', objectFit:'cover', filter:'grayscale(20%)', transition:'0.4s' }} />
+          <img src="https://uploads.onecompiler.io/43d4xt63k/43d7tx2r5/high-1734409463.jpg" alt="Rinku" style={{ width: '100%', borderRadius: '8px', border: '1px solid var(--border-light)', height:'500px', objectFit:'cover', filter:'grayscale(20%)', transition:'0.4s' }} />
         </div>
         <div style={{ flex: 1.2, minWidth: '300px' }}>
           <span style={{ color: 'var(--primary)', fontWeight: '700', letterSpacing:'2px', fontSize:'0.8rem', textTransform:'uppercase' }}>ABOUT ME</span>
