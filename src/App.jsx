@@ -55,7 +55,6 @@ function App() {
             views: Math.floor(progress * 12000000),
             cities: Math.floor(progress * 15)
           });
-          
           if (currentStep >= steps) {
              clearInterval(timer);
              setCounts({ subs: 42200, views: 12000000, cities: 15 }); 
@@ -73,6 +72,31 @@ function App() {
     return num + '+';
   };
 
+  // --- 4. WHATSAPP FORM LOGIC (NEW) ---
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const sendToWhatsApp = (e) => {
+    e.preventDefault();
+    const phoneNumber = "918141038545"; // Your Number
+    
+    // Formatting the message
+    const text = `*New Inquiry from Website*%0A%0A*Name:* ${formData.name}%0A*Email:* ${formData.email}%0A*Message:* ${formData.message}`;
+    
+    // Create the URL
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${text}`;
+    
+    // Open WhatsApp
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
     <div>
       {/* NAVBAR */}
@@ -82,7 +106,6 @@ function App() {
         background: 'var(--glass)', borderBottom: '1px solid var(--border-light)'
       }}>
         <div style={{ fontSize: '1.5rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* YOUR DP IS HERE */}
           <img src="https://uploads.onecompiler.io/43d4xt63k/43d7tx2r5/high-1734409463.jpg" alt="Profile" style={{width:'45px', height:'45px', borderRadius:'50%', border:'2px solid var(--primary)', objectFit:'cover'}} />
           MR RINKU <span style={{ color: 'var(--secondary)' }}>INFRA</span>
         </div>
@@ -147,6 +170,7 @@ function App() {
         </div>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
+          {/* Card 1 */}
           <div className="project-card reveal">
             <div style={{position:'relative', paddingTop:'56.25%', background:'#000'}}>
                 <iframe style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}} src="https://www.youtube.com/embed/0tSJHoVyCX4" title="Video" frameBorder="0" allowFullScreen></iframe>
@@ -159,6 +183,7 @@ function App() {
               </div>
             </div>
           </div>
+          {/* Card 2 */}
           <div className="project-card reveal" style={{ transitionDelay:'0.2s' }}>
             <div style={{position:'relative', paddingTop:'56.25%', background:'#000'}}>
                 <iframe style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}} src="https://www.youtube.com/embed/b11waIBNxto" title="Video" frameBorder="0" allowFullScreen></iframe>
@@ -171,6 +196,7 @@ function App() {
               </div>
             </div>
           </div>
+           {/* Card 3 */}
            <div className="project-card reveal" style={{ transitionDelay:'0.4s' }}>
             <div style={{position:'relative', paddingTop:'56.25%', background:'#000'}}>
                 <iframe style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}} src="https://www.youtube.com/embed/oremyVh0eLk" title="Video" frameBorder="0" allowFullScreen></iframe>
@@ -232,17 +258,16 @@ function App() {
       <section id="about" className="section-padding reveal" style={{ display: 'flex', flexWrap: 'wrap', gap: '60px', alignItems: 'center', background: 'linear-gradient(90deg, #030305 0%, #08090b 100%)' }}>
         <div style={{ flex: 1, minWidth: '300px' }}>
           {/* ABOUT ME PHOTO: USING YOUR BACKGROUND IMAGE AS A PLACEHOLDER FOR NOW */}
-          <img src="https://uploads.onecompiler.io/43d4xt63k/44bzks3xk/PHOTO-2026-01-29-14-17-43.jpg" alt="Rinku" style={{ width: '100%', borderRadius: '8px', border: '1px solid var(--border-light)', height:'500px', objectFit:'cover', filter:'grayscale(20%)', transition:'0.4s' }} />
+          <img src="https://uploads.onecompiler.io/43d4xt63k/43d7tx2r5/high-1734409463.jpg" alt="Rinku" style={{ width: '100%', borderRadius: '8px', border: '1px solid var(--border-light)', height:'500px', objectFit:'cover', filter:'grayscale(20%)', transition:'0.4s' }} />
         </div>
         <div style={{ flex: 1.2, minWidth: '300px' }}>
           <span style={{ color: 'var(--primary)', fontWeight: '700', letterSpacing:'2px', fontSize:'0.8rem', textTransform:'uppercase' }}>ABOUT ME</span>
           <h2 style={{ fontSize: '3.5rem', margin: '15px 0' }}>Hello, I am <span style={{ color: 'var(--primary)' }}>Rinku Nayak</span></h2>
-          <p style={{ color: '#94a3b8', lineHeight: 1.7, fontSize: '1.1rem' }}>
+          <p style={{ color: '#94a3b8', lineHeight: 1.7, fontSize: '1.1rem', marginBottom:'20px' }}>
             I am a content creator based in <b>Surat, Gujarat</b>. I am not a media agency or an engineer. I am just a passionate guy with a camera who loves seeing India grow.
           </p>
-          <br />
           <p style={{ color: '#94a3b8', lineHeight: 1.7, fontSize: '1.1rem' }}>
-            I started this channel to document the massive infrastructure changes happening in our country. I travel on my own expense to bring you ground-level reports of new bridges, tunnels, and highways.
+            I started this channel to document the massive infrastructure changes happening in our country. I travel on my own expense to bring you ground-level reports.
           </p>
           <div style={{marginTop:'30px', display:'flex', gap:'15px', alignItems:'center'}}>
              <span style={{fontFamily:'Rajdhani', fontSize:'1.5rem', fontWeight:'bold'}}>Rinku Nayak</span>
@@ -251,7 +276,7 @@ function App() {
         </div>
       </section>
 
-      {/* CONTACT SECTION */}
+      {/* CONTACT SECTION (With Form Animation & WhatsApp) */}
       <section id="contact" className="section-padding reveal">
         <div className="contact-wrapper" style={{display:'grid', gridTemplateColumns: window.innerWidth > 992 ? '1fr 1fr' : '1fr', gap:'80px', alignItems:'center'}}>
             <div>
@@ -277,20 +302,44 @@ function App() {
                 </div>
             </div>
 
-            <form style={{background:'var(--bg-panel)', padding:'50px', borderRadius:'8px', border:'1px solid var(--border-light)', boxShadow:'0 20px 50px rgba(0,0,0,0.5)'}}>
+            <form onSubmit={sendToWhatsApp} style={{background:'var(--bg-panel)', padding:'50px', borderRadius:'8px', border:'1px solid var(--border-light)', boxShadow:'0 20px 50px rgba(0,0,0,0.5)'}}>
                 <div className="input-group">
-                    <input type="text" className="form-input" placeholder=" " required />
+                    <input 
+                        type="text" 
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="form-input" 
+                        placeholder=" " 
+                        required 
+                    />
                     <label className="form-label">Your Name</label>
                 </div>
                 <div className="input-group">
-                    <input type="email" className="form-input" placeholder=" " required />
+                    <input 
+                        type="email" 
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="form-input" 
+                        placeholder=" " 
+                        required 
+                    />
                     <label className="form-label">Your Email</label>
                 </div>
                 <div className="input-group">
-                    <textarea rows="4" className="form-input" placeholder=" " required></textarea>
+                    <textarea 
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        rows="4" 
+                        className="form-input" 
+                        placeholder=" " 
+                        required
+                    ></textarea>
                     <label className="form-label">Message</label>
                 </div>
-                <button className="btn-primary" style={{width:'100%', padding:'15px', background:'var(--primary)', border:'none', fontWeight:'bold', cursor:'pointer', borderRadius:'4px'}}>Send Message</button>
+                <button className="btn-primary" style={{width:'100%', padding:'15px', background:'var(--primary)', border:'none', fontWeight:'bold', cursor:'pointer', borderRadius:'4px'}}>Send Message on WhatsApp</button>
             </form>
         </div>
       </section>
@@ -308,7 +357,7 @@ function App() {
             <a href="#" className="social-icon"><i className="fab fa-facebook-f"></i></a>
             <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" className="social-icon"><i className="fab fa-youtube"></i></a>
             </div>
-            <p style={{ color: '#666', fontSize:'0.9rem' }}>&copy; 2025 Mr Rinku Infra. All rights reserved.</p>
+            <p style={{ color: '#666', fontSize:'0.9rem' }}>&copy; 2026 AR infoTech. All rights reserved.</p>
         </div>
       </footer>
     </div>
