@@ -22,7 +22,7 @@ body {
   background-image: 
       radial-gradient(circle at 15% 50%, rgba(255, 123, 0, 0.04), transparent 25%), 
       radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.04), transparent 25%),
-      url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070'); /* <--- CHANGE BG IMAGE HERE */
+      url('<img src="https://uploads.onecompiler.io/43d4xt63k/44bzks3xk/PHOTO-2026-01-29-14-17-43.jpg" />'); /* <--- CHANGE BG IMAGE HERE */
       
   background-size: cover;
   background-position: center;
