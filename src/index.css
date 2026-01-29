@@ -18,11 +18,14 @@ body {
   background-color: var(--bg-dark);
   color: var(--text-main);
   
-  /* --- BACKGROUND IMAGE FIX --- */
+  /* --- EXACT BACKGROUND MATCH WITH HTML --- */
   background-image: 
-      /* A slight dark overlay so text is readable */
-      linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)),
-      /* YOUR IMAGE */
+      /* Light effect at top-left */
+      radial-gradient(circle at 15% 50%, rgba(255, 123, 0, 0.04), transparent 25%),
+      /* Blue effect at bottom-right */
+      radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.04), transparent 25%),
+      /* Your background image with a gradient overlay to match the HTML look */
+      linear-gradient(135deg, rgba(5,5,5,0.9), rgba(5,5,5,0.4)),
       url('https://uploads.onecompiler.io/43d4xt63k/44bzks3xk/PHOTO-2026-01-29-14-17-43.jpg');
       
   background-size: cover;
