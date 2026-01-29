@@ -50,7 +50,6 @@ function App() {
         
         const timer = setInterval(() => {
           currentStep++;
-          // Calculate progress (0 to 1)
           const progress = currentStep / steps;
           
           setCounts({
@@ -61,7 +60,6 @@ function App() {
           
           if (currentStep >= steps) {
              clearInterval(timer);
-             // Ensure final numbers are exact
              setCounts({ subs: 42200, views: 12000000, cities: 15 }); 
           }
         }, intervalTime);
@@ -71,7 +69,7 @@ function App() {
     return () => observer.disconnect();
   }, [hasStarted]);
 
-  // Helper to format numbers (42200 -> 42K+)
+  // Helper to format numbers
   const formatNumber = (num) => {
     if (num >= 1000000) return (num / 1000000).toFixed(0) + 'M+';
     if (num >= 1000) return (num / 1000).toFixed(0) + 'K+';
@@ -87,7 +85,8 @@ function App() {
         background: 'var(--glass)', borderBottom: '1px solid var(--border-light)'
       }}>
         <div style={{ fontSize: '1.5rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src="INSERT_YOUR_IMAGE_URL_HERE" alt="Profile" style={{width:'45px', height:'45px', borderRadius:'50%', border:'2px solid var(--primary)', objectFit:'cover'}} />
+          {/* REPLACE PROFILE PIC URL BELOW */}
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100" alt="Profile" style={{width:'45px', height:'45px', borderRadius:'50%', border:'2px solid var(--primary)', objectFit:'cover'}} />
           MR RINKU <span style={{ color: 'var(--secondary)' }}>INFRA</span>
         </div>
         <div className="nav-links" style={{ display: 'flex', gap: '30px' }}>
@@ -104,8 +103,7 @@ function App() {
 
       {/* HERO SECTION */}
       <section id="home" style={{ 
-        minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 6%', paddingTop: '100px', position: 'relative',
-        background: `linear-gradient(180deg, rgba(3,3,5,0.7) 0%, #030305 100%), url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070') center/cover fixed`
+        minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 6%', paddingTop: '100px', position: 'relative'
       }}>
         <div className="hero-content reveal active" style={{ maxWidth: '800px', zIndex: 2, marginTop:'-50px' }}>
           <span style={{ color: 'var(--secondary)', border: '1px solid var(--secondary)', padding: '6px 14px', fontSize: '0.75rem', fontWeight: '700', borderRadius:'4px', background:'rgba(0, 240, 255, 0.1)', letterSpacing:'2px' }}>YOUTUBE CONTENT CREATOR</span>
@@ -239,6 +237,7 @@ function App() {
       {/* ABOUT SECTION */}
       <section id="about" className="section-padding reveal" style={{ display: 'flex', flexWrap: 'wrap', gap: '60px', alignItems: 'center', background: 'linear-gradient(90deg, #030305 0%, #08090b 100%)' }}>
         <div style={{ flex: 1, minWidth: '300px' }}>
+          {/* REPLACE WITH YOUR ACTION PHOTO */}
           <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780" alt="Rinku" style={{ width: '100%', borderRadius: '8px', border: '1px solid var(--border-light)', height:'500px', objectFit:'cover', filter:'grayscale(20%)', transition:'0.4s' }} />
         </div>
         <div style={{ flex: 1.2, minWidth: '300px' }}>
@@ -315,7 +314,7 @@ function App() {
             <a href="#" className="social-icon"><i className="fab fa-facebook-f"></i></a>
             <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" className="social-icon"><i className="fab fa-youtube"></i></a>
             </div>
-            <p style={{ color: '#666', fontSize:'0.9rem' }}>&copy; 2026 AR Infotech. All rights reserved.</p>
+            <p style={{ color: '#666', fontSize:'0.9rem' }}>&copy; 2026 AR InfoTech. All rights reserved.</p>
         </div>
       </footer>
     </div>
