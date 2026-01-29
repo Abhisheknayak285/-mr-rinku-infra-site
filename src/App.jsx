@@ -1,7 +1,53 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 function App() {
-  // Stats Animation Logic
+  // --- 1. TYPEWRITER EFFECT ---
+  const [text, setText] = useState('');
+  const words = ["Mega Projects", "Expressways", "Metro Lines", "Growth Story"];
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(150);
+
+  useEffect(() => {
+    const handleType = () => {
+      const i = loopNum % words.length;
+      const fullText = words[i];
+
+      setText(isDeleting ? fullText.substring(0, text.length - 1) : fullText.substring(0, text.length + 1));
+
+      setTypingSpeed(isDeleting ? 50 : 150);
+
+      if (!isDeleting && text === fullText) {
+        setTimeout(() => setIsDeleting(true), 2000); // Pause at end
+      } else if (isDeleting && text === '') {
+        setIsDeleting(false);
+        setLoopNum(loopNum + 1);
+      }
+    };
+
+    const timer = setTimeout(handleType, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [text, isDeleting, loopNum, typingSpeed, words]);
+
+
+  // --- 2. SCROLL REVEAL ANIMATION ---
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const revealElements = document.querySelectorAll('.reveal');
+    revealElements.forEach((el) => observer.observe(el));
+
+    return () => revealElements.forEach((el) => observer.unobserve(el));
+  }, []); // Run once on load
+
+
+  // --- 3. STATS COUNTER ---
   const [subs, setSubs] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
@@ -19,12 +65,10 @@ function App() {
         background: 'var(--glass)', borderBottom: '1px solid var(--border-light)'
       }}>
         <div style={{ fontSize: '1.5rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* PASTE YOUR PROFILE PIC URL BELOW */}
           <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100" alt="Profile" style={{width:'40px', height:'40px', borderRadius:'50%', border:'2px solid var(--primary)', objectFit:'cover'}} />
           MR RINKU <span style={{ color: 'var(--secondary)' }}>INFRA</span>
         </div>
         
-        {/* Desktop Menu */}
         <div className="nav-links" style={{ display: 'flex', gap: '30px', fontSize: '0.9rem', fontWeight: '600', color:'#ccc' }}>
           <a href="#home">Home</a>
           <a href="#videos">My Videos</a>
@@ -39,13 +83,19 @@ function App() {
       </nav>
 
       {/* HERO SECTION */}
-      <section id="home" className="section-padding" style={{ 
-        minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: '100px', position: 'relative',
+      <section id="home" style={{ 
+        minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 6%', paddingTop: '100px', position: 'relative',
         background: `linear-gradient(180deg, rgba(3,3,5,0.7) 0%, #030305 100%), url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070') center/cover fixed`
       }}>
-        <div className="hero-content" style={{ maxWidth: '800px', zIndex: 2 }}>
+        <div className="hero-content reveal active" style={{ maxWidth: '800px', zIndex: 2 }}>
           <span style={{ color: 'var(--secondary)', border: '1px solid var(--secondary)', padding: '5px 10px', fontSize: '0.8rem', fontWeight: 'bold', borderRadius:'4px', background:'rgba(0, 240, 255, 0.1)' }}>YOUTUBE CONTENT CREATOR</span>
-          <h1 style={{ fontSize: '3.5rem', margin: '20px 0', lineHeight: 1, fontWeight: '800' }}>Exploring India's <br /><span style={{ color: 'var(--primary)' }}>Growth Story</span></h1>
+          
+          {/* TYPEWRITER EFFECT */}
+          <h1 style={{ fontSize: '3.5rem', margin: '20px 0', lineHeight: 1, fontWeight: '800' }}>
+            Exploring India's <br />
+            <span style={{ color: 'var(--primary)', borderRight:'3px solid var(--primary)' }}>{text}</span>
+          </h1>
+
           <p style={{ color: '#d1d5db', fontSize: '1.1rem', maxWidth: '600px', marginBottom: '30px', lineHeight:'1.6', background:'rgba(0,0,0,0.5)', padding:'15px', borderRadius:'4px', borderLeft:'3px solid var(--primary)' }}>
             Hi friends! I am Rinku Nayak from Surat. I travel to construction sites across India to show you the real progress of Bullet Trains, Metros, and Expressways through my videos.
           </p>
@@ -55,8 +105,8 @@ function App() {
           </div>
         </div>
 
-        {/* STATS */}
-        <div className="stats-container" style={{
+        {/* STATS (Animated Reveal) */}
+        <div className="stats-container reveal" style={{
           position: 'absolute', bottom: 0, right: 0, background: 'rgba(10,10,15,0.95)', 
           padding: '30px 50px', display: 'flex', gap: '50px', borderTopLeftRadius: '20px', border: '1px solid var(--border-light)'
         }}>
@@ -75,13 +125,11 @@ function App() {
         </div>
       </section>
 
-      {/* LATEST VIDEOS */}
+      {/* LATEST VIDEOS (With Reveal Animation) */}
       <section id="videos" className="section-padding">
-        <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-end', marginBottom:'40px', flexWrap:'wrap'}}>
-            <div>
-                <h2 style={{ fontSize: '2.5rem', marginBottom:'10px' }}>My Newest <span style={{ color: 'var(--primary)' }}>Uploads</span></h2>
-                <p style={{color:'#888'}}>Check out the latest videos I just posted on the channel.</p>
-            </div>
+        <div className="reveal" style={{marginBottom:'40px'}}>
+            <h2 style={{ fontSize: '2.5rem', marginBottom:'10px' }}>My Newest <span style={{ color: 'var(--primary)' }}>Uploads</span></h2>
+            <p style={{color:'#888'}}>Check out the latest videos I just posted on the channel.</p>
         </div>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
@@ -97,7 +145,7 @@ function App() {
             </div>
           </div>
           {/* Card 2 */}
-          <div className="reveal" style={{ background: 'var(--bg-panel)', border: '1px solid var(--border-light)', borderRadius:'8px', overflow:'hidden' }}>
+          <div className="reveal" style={{ background: 'var(--bg-panel)', border: '1px solid var(--border-light)', borderRadius:'8px', overflow:'hidden', transitionDelay:'0.2s' }}>
             <div style={{position:'relative', paddingTop:'56.25%'}}>
                 <iframe style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}} src="https://www.youtube.com/embed/b11waIBNxto" title="Video" frameBorder="0" allowFullScreen></iframe>
             </div>
@@ -108,7 +156,7 @@ function App() {
             </div>
           </div>
            {/* Card 3 */}
-           <div className="reveal" style={{ background: 'var(--bg-panel)', border: '1px solid var(--border-light)', borderRadius:'8px', overflow:'hidden' }}>
+           <div className="reveal" style={{ background: 'var(--bg-panel)', border: '1px solid var(--border-light)', borderRadius:'8px', overflow:'hidden', transitionDelay:'0.4s' }}>
             <div style={{position:'relative', paddingTop:'56.25%'}}>
                 <iframe style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}} src="https://www.youtube.com/embed/oremyVh0eLk" title="Video" frameBorder="0" allowFullScreen></iframe>
             </div>
@@ -121,26 +169,23 @@ function App() {
         </div>
       </section>
 
-      {/* SERIES SECTION */}
+      {/* SERIES SECTION (With Reveal) */}
       <section id="series" className="section-padding" style={{background:'#08090b', borderTop:'1px solid var(--border-light)', borderBottom:'1px solid var(--border-light)'}}>
-        <h2 style={{ fontSize: '2.5rem', marginBottom: '40px' }}>Video <span style={{ color: 'var(--primary)' }}>Playlists</span></h2>
+        <h2 className="reveal" style={{ fontSize: '2.5rem', marginBottom: '40px' }}>Video <span style={{ color: 'var(--primary)' }}>Playlists</span></h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
-            {/* Playlist 1 */}
-            <div style={{background:'var(--bg-panel)', padding:'30px', border:'1px solid var(--border-light)', borderRadius:'8px'}}>
+            <div className="reveal" style={{background:'var(--bg-panel)', padding:'30px', border:'1px solid var(--border-light)', borderRadius:'8px'}}>
                 <iframe style={{width:'100%', borderRadius:'4px', marginBottom:'15px'}} src="https://www.youtube.com/embed/b11waIBNxto" title="Video" frameBorder="0" allowFullScreen></iframe>
                 <h3 style={{marginBottom:'10px'}}>Bullet Train Vlogs</h3>
                 <p style={{color:'#888', fontSize:'0.9rem', marginBottom:'20px'}}>All my site visits to the Mumbai-Ahmedabad High Speed Rail project.</p>
                 <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{color:'var(--secondary)', fontWeight:'bold', textTransform:'uppercase', fontSize:'0.8rem'}}>View Playlist &rarr;</a>
             </div>
-             {/* Playlist 2 */}
-             <div style={{background:'var(--bg-panel)', padding:'30px', border:'1px solid var(--border-light)', borderRadius:'8px'}}>
+             <div className="reveal" style={{background:'var(--bg-panel)', padding:'30px', border:'1px solid var(--border-light)', borderRadius:'8px', transitionDelay:'0.2s'}}>
                 <iframe style={{width:'100%', borderRadius:'4px', marginBottom:'15px'}} src="https://www.youtube.com/embed/0tSJHoVyCX4" title="Video" frameBorder="0" allowFullScreen></iframe>
                 <h3 style={{marginBottom:'10px'}}>Expressway Updates</h3>
                 <p style={{color:'#888', fontSize:'0.9rem', marginBottom:'20px'}}>My road trips and updates on new Expressways like DME & Dwarka.</p>
                 <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{color:'var(--secondary)', fontWeight:'bold', textTransform:'uppercase', fontSize:'0.8rem'}}>View Playlist &rarr;</a>
             </div>
-             {/* Playlist 3 */}
-             <div style={{background:'var(--bg-panel)', padding:'30px', border:'1px solid var(--border-light)', borderRadius:'8px'}}>
+             <div className="reveal" style={{background:'var(--bg-panel)', padding:'30px', border:'1px solid var(--border-light)', borderRadius:'8px', transitionDelay:'0.4s'}}>
                 <iframe style={{width:'100%', borderRadius:'4px', marginBottom:'15px'}} src="https://www.youtube.com/embed/9ECMylsM1Z8" title="Video" frameBorder="0" allowFullScreen></iframe>
                 <h3 style={{marginBottom:'10px'}}>Metro City Tours</h3>
                 <p style={{color:'#888', fontSize:'0.9rem', marginBottom:'20px'}}>Showing you the underground and elevated Metro work in different cities.</p>
@@ -150,7 +195,7 @@ function App() {
       </section>
 
       {/* ABOUT SECTION */}
-      <section id="about" className="section-padding" className="about-section" style={{ display: 'flex', flexWrap: 'wrap', gap: '50px', alignItems: 'center', padding:'80px 6%', background: 'linear-gradient(90deg, #030305 0%, #08090b 100%)' }}>
+      <section id="about" className="section-padding reveal" style={{ display: 'flex', flexWrap: 'wrap', gap: '50px', alignItems: 'center', padding:'80px 6%', background: 'linear-gradient(90deg, #030305 0%, #08090b 100%)' }}>
         <div style={{ flex: 1, minWidth: '300px' }}>
           <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780" alt="Rinku" style={{ width: '100%', borderRadius: '8px', border: '1px solid var(--border-light)', height:'400px', objectFit:'cover', filter:'grayscale(20%)' }} />
         </div>
@@ -172,7 +217,7 @@ function App() {
       </section>
 
       {/* CONTACT SECTION */}
-      <section id="contact" className="section-padding">
+      <section id="contact" className="section-padding reveal">
         <div className="contact-wrapper" style={{display:'grid', gridTemplateColumns: window.innerWidth > 992 ? '1fr 1fr' : '1fr', gap:'50px', alignItems:'center'}}>
             <div>
                 <h3 style={{fontSize:'2.2rem', marginBottom:'20px'}}>Business / Sponsorships</h3>
