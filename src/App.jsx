@@ -12,49 +12,57 @@ function App() {
     const handleType = () => {
       const i = loopNum % words.length;
       const fullText = words[i];
-
       setText(isDeleting ? fullText.substring(0, text.length - 1) : fullText.substring(0, text.length + 1));
-
       setTypingSpeed(isDeleting ? 50 : 150);
-
-      if (!isDeleting && text === fullText) {
-        setTimeout(() => setIsDeleting(true), 2000); // Pause at end
-      } else if (isDeleting && text === '') {
-        setIsDeleting(false);
-        setLoopNum(loopNum + 1);
-      }
+      if (!isDeleting && text === fullText) setTimeout(() => setIsDeleting(true), 2000);
+      else if (isDeleting && text === '') { setIsDeleting(false); setLoopNum(loopNum + 1); }
     };
-
     const timer = setTimeout(handleType, typingSpeed);
     return () => clearTimeout(timer);
   }, [text, isDeleting, loopNum, typingSpeed, words]);
-
 
   // --- 2. SCROLL REVEAL ANIMATION ---
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('active');
       });
     }, { threshold: 0.1 });
-
     const revealElements = document.querySelectorAll('.reveal');
     revealElements.forEach((el) => observer.observe(el));
-
     return () => revealElements.forEach((el) => observer.unobserve(el));
-  }, []); // Run once on load
-
-
-  // --- 3. STATS COUNTER ---
-  const [subs, setSubs] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSubs((prev) => (prev < 42 ? prev + 1 : 42));
-    }, 40);
-    return () => clearInterval(interval);
   }, []);
+
+  // --- 3. STATS COUNTER (Starts when visible) ---
+  const [counts, setCounts] = useState({ subs: 0, views: 0, cities: 0 });
+  const statsRef = useRef(null);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !hasStarted) {
+        setHasStarted(true);
+        // Start counting
+        const duration = 2000; // 2 seconds
+        const steps = 50;
+        const intervalTime = duration / steps;
+        
+        let currentStep = 0;
+        const timer = setInterval(() => {
+          currentStep++;
+          setCounts({
+            subs: Math.min(42, Math.ceil((42 / steps) * currentStep)),
+            views: Math.min(12, Math.ceil((12 / steps) * currentStep)),
+            cities: Math.min(15, Math.ceil((15 / steps) * currentStep))
+          });
+          if (currentStep >= steps) clearInterval(timer);
+        }, intervalTime);
+      }
+    });
+    
+    if (statsRef.current) observer.observe(statsRef.current);
+    return () => observer.disconnect();
+  }, [hasStarted]);
 
   return (
     <div>
@@ -69,15 +77,15 @@ function App() {
           MR RINKU <span style={{ color: 'var(--secondary)' }}>INFRA</span>
         </div>
         
-        <div className="nav-links" style={{ display: 'flex', gap: '30px', fontSize: '0.9rem', fontWeight: '600', color:'#ccc' }}>
-          <a href="#home">Home</a>
-          <a href="#videos">My Videos</a>
-          <a href="#series">Playlists</a>
-          <a href="#about">About Me</a>
-          <a href="#contact">Contact</a>
+        <div className="nav-links" style={{ display: 'flex', gap: '30px' }}>
+          <a href="#home" className="nav-link">Home</a>
+          <a href="#videos" className="nav-link">My Videos</a>
+          <a href="#series" className="nav-link">Playlists</a>
+          <a href="#about" className="nav-link">About Me</a>
+          <a href="#contact" className="nav-link">Contact</a>
         </div>
         
-        <a href="https://youtube.com/@mr.rinkuinfra?si=mw5w8KlcEpHbY01_" target="_blank" style={{ background: '#cc0000', color: 'white', padding: '10px 20px', borderRadius: '4px', fontWeight: 'bold', display:'flex', alignItems:'center', gap:'8px' }}>
+        <a href="https://youtube.com/@mr.rinkuinfra?si=mw5w8KlcEpHbY01_" target="_blank" style={{ background: '#cc0000', color: 'white', padding: '10px 20px', borderRadius: '4px', fontWeight: 'bold', display:'flex', alignItems:'center', gap:'8px', textDecoration:'none' }}>
           <i className="fab fa-youtube"></i> Subscribe
         </a>
       </nav>
@@ -89,43 +97,39 @@ function App() {
       }}>
         <div className="hero-content reveal active" style={{ maxWidth: '800px', zIndex: 2 }}>
           <span style={{ color: 'var(--secondary)', border: '1px solid var(--secondary)', padding: '5px 10px', fontSize: '0.8rem', fontWeight: 'bold', borderRadius:'4px', background:'rgba(0, 240, 255, 0.1)' }}>YOUTUBE CONTENT CREATOR</span>
-          
-          {/* TYPEWRITER EFFECT */}
           <h1 style={{ fontSize: '3.5rem', margin: '20px 0', lineHeight: 1, fontWeight: '800' }}>
-            Exploring India's <br />
-            <span style={{ color: 'var(--primary)', borderRight:'3px solid var(--primary)' }}>{text}</span>
+            Exploring India's <br /><span style={{ color: 'var(--primary)', borderRight:'3px solid var(--primary)' }}>{text}</span>
           </h1>
-
           <p style={{ color: '#d1d5db', fontSize: '1.1rem', maxWidth: '600px', marginBottom: '30px', lineHeight:'1.6', background:'rgba(0,0,0,0.5)', padding:'15px', borderRadius:'4px', borderLeft:'3px solid var(--primary)' }}>
             Hi friends! I am Rinku Nayak from Surat. I travel to construction sites across India to show you the real progress of Bullet Trains, Metros, and Expressways through my videos.
           </p>
           <div style={{ display: 'flex', gap: '20px', flexWrap:'wrap' }}>
-            <a href="#videos" style={{ background: 'var(--primary)', color: 'black', padding: '15px 30px', fontWeight: 'bold', borderRadius:'4px' }}>Watch My Videos</a>
-            <a href="#about" style={{ border: '1px solid white', padding: '15px 30px', fontWeight: 'bold', borderRadius:'4px' }}>My Story</a>
+            <a href="#videos" className="btn-primary" style={{ background: 'var(--primary)', color: 'black', padding: '15px 30px', fontWeight: 'bold', borderRadius:'4px', textDecoration:'none' }}>Watch My Videos</a>
+            <a href="#about" style={{ border: '1px solid white', padding: '15px 30px', fontWeight: 'bold', borderRadius:'4px', textDecoration:'none', color:'white' }}>My Story</a>
           </div>
         </div>
 
         {/* STATS (Animated Reveal) */}
-        <div className="stats-container reveal" style={{
+        <div ref={statsRef} className="stats-container reveal" style={{
           position: 'absolute', bottom: 0, right: 0, background: 'rgba(10,10,15,0.95)', 
           padding: '30px 50px', display: 'flex', gap: '50px', borderTopLeftRadius: '20px', border: '1px solid var(--border-light)'
         }}>
           <div style={{ textAlign: 'center' }}>
-            <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)', margin:'0' }}>{subs}K+</h3>
+            <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)', margin:'0' }}>{counts.subs}K+</h3>
             <p style={{ color: '#aaa', fontSize: '0.8rem', textTransform:'uppercase' }}>Subscribers</p>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)', margin:'0' }}>12M+</h3>
+            <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)', margin:'0' }}>{counts.views}M+</h3>
             <p style={{ color: '#aaa', fontSize: '0.8rem', textTransform:'uppercase' }}>Total Views</p>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)', margin:'0' }}>15+</h3>
+            <h3 style={{ fontSize: '2.5rem', color: 'var(--primary)', margin:'0' }}>{counts.cities}+</h3>
             <p style={{ color: '#aaa', fontSize: '0.8rem', textTransform:'uppercase' }}>Cities Visited</p>
           </div>
         </div>
       </section>
 
-      {/* LATEST VIDEOS (With Reveal Animation) */}
+      {/* LATEST VIDEOS */}
       <section id="videos" className="section-padding">
         <div className="reveal" style={{marginBottom:'40px'}}>
             <h2 style={{ fontSize: '2.5rem', marginBottom:'10px' }}>My Newest <span style={{ color: 'var(--primary)' }}>Uploads</span></h2>
@@ -141,7 +145,7 @@ function App() {
             <div style={{ padding: '20px' }}>
               <span style={{color:'var(--primary)', fontSize:'0.7rem', fontWeight:'bold', textTransform:'uppercase'}}>Latest Update</span>
               <h3 style={{margin:'10px 0'}}>I visited the Delhi-Mumbai Expressway</h3>
-              <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{ color: 'var(--secondary)', fontWeight: 'bold', fontSize:'0.9rem' }}><i className="fab fa-youtube"></i> Watch Now</a>
+              <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{ color: 'var(--secondary)', fontWeight: 'bold', fontSize:'0.9rem', textDecoration:'none' }}><i className="fab fa-youtube"></i> Watch Now</a>
             </div>
           </div>
           {/* Card 2 */}
@@ -152,7 +156,7 @@ function App() {
             <div style={{ padding: '20px' }}>
               <span style={{color:'var(--primary)', fontSize:'0.7rem', fontWeight:'bold', textTransform:'uppercase'}}>Bullet Train</span>
               <h3 style={{margin:'10px 0'}}>Narmada River Bridge Construction</h3>
-              <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{ color: 'var(--secondary)', fontWeight: 'bold', fontSize:'0.9rem' }}><i className="fab fa-youtube"></i> Watch Now</a>
+              <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{ color: 'var(--secondary)', fontWeight: 'bold', fontSize:'0.9rem', textDecoration:'none' }}><i className="fab fa-youtube"></i> Watch Now</a>
             </div>
           </div>
            {/* Card 3 */}
@@ -163,13 +167,13 @@ function App() {
             <div style={{ padding: '20px' }}>
               <span style={{color:'var(--primary)', fontSize:'0.7rem', fontWeight:'bold', textTransform:'uppercase'}}>Expressway</span>
               <h3 style={{margin:'10px 0'}}>Ankleshwar Interchange Drive</h3>
-              <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{ color: 'var(--secondary)', fontWeight: 'bold', fontSize:'0.9rem' }}><i className="fab fa-youtube"></i> Watch Now</a>
+              <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{ color: 'var(--secondary)', fontWeight: 'bold', fontSize:'0.9rem', textDecoration:'none' }}><i className="fab fa-youtube"></i> Watch Now</a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SERIES SECTION (With Reveal) */}
+      {/* SERIES SECTION */}
       <section id="series" className="section-padding" style={{background:'#08090b', borderTop:'1px solid var(--border-light)', borderBottom:'1px solid var(--border-light)'}}>
         <h2 className="reveal" style={{ fontSize: '2.5rem', marginBottom: '40px' }}>Video <span style={{ color: 'var(--primary)' }}>Playlists</span></h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
@@ -177,19 +181,19 @@ function App() {
                 <iframe style={{width:'100%', borderRadius:'4px', marginBottom:'15px'}} src="https://www.youtube.com/embed/b11waIBNxto" title="Video" frameBorder="0" allowFullScreen></iframe>
                 <h3 style={{marginBottom:'10px'}}>Bullet Train Vlogs</h3>
                 <p style={{color:'#888', fontSize:'0.9rem', marginBottom:'20px'}}>All my site visits to the Mumbai-Ahmedabad High Speed Rail project.</p>
-                <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{color:'var(--secondary)', fontWeight:'bold', textTransform:'uppercase', fontSize:'0.8rem'}}>View Playlist &rarr;</a>
+                <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{color:'var(--secondary)', fontWeight:'bold', textTransform:'uppercase', fontSize:'0.8rem', textDecoration:'none'}}>View Playlist &rarr;</a>
             </div>
              <div className="reveal" style={{background:'var(--bg-panel)', padding:'30px', border:'1px solid var(--border-light)', borderRadius:'8px', transitionDelay:'0.2s'}}>
                 <iframe style={{width:'100%', borderRadius:'4px', marginBottom:'15px'}} src="https://www.youtube.com/embed/0tSJHoVyCX4" title="Video" frameBorder="0" allowFullScreen></iframe>
                 <h3 style={{marginBottom:'10px'}}>Expressway Updates</h3>
                 <p style={{color:'#888', fontSize:'0.9rem', marginBottom:'20px'}}>My road trips and updates on new Expressways like DME & Dwarka.</p>
-                <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{color:'var(--secondary)', fontWeight:'bold', textTransform:'uppercase', fontSize:'0.8rem'}}>View Playlist &rarr;</a>
+                <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{color:'var(--secondary)', fontWeight:'bold', textTransform:'uppercase', fontSize:'0.8rem', textDecoration:'none'}}>View Playlist &rarr;</a>
             </div>
              <div className="reveal" style={{background:'var(--bg-panel)', padding:'30px', border:'1px solid var(--border-light)', borderRadius:'8px', transitionDelay:'0.4s'}}>
                 <iframe style={{width:'100%', borderRadius:'4px', marginBottom:'15px'}} src="https://www.youtube.com/embed/9ECMylsM1Z8" title="Video" frameBorder="0" allowFullScreen></iframe>
                 <h3 style={{marginBottom:'10px'}}>Metro City Tours</h3>
                 <p style={{color:'#888', fontSize:'0.9rem', marginBottom:'20px'}}>Showing you the underground and elevated Metro work in different cities.</p>
-                <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{color:'var(--secondary)', fontWeight:'bold', textTransform:'uppercase', fontSize:'0.8rem'}}>View Playlist &rarr;</a>
+                <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{color:'var(--secondary)', fontWeight:'bold', textTransform:'uppercase', fontSize:'0.8rem', textDecoration:'none'}}>View Playlist &rarr;</a>
             </div>
         </div>
       </section>
@@ -216,7 +220,7 @@ function App() {
         </div>
       </section>
 
-      {/* CONTACT SECTION */}
+      {/* CONTACT SECTION (With Form Animation) */}
       <section id="contact" className="section-padding reveal">
         <div className="contact-wrapper" style={{display:'grid', gridTemplateColumns: window.innerWidth > 992 ? '1fr 1fr' : '1fr', gap:'50px', alignItems:'center'}}>
             <div>
@@ -243,16 +247,25 @@ function App() {
             </div>
 
             <form style={{background:'var(--bg-panel)', padding:'40px', borderRadius:'8px', border:'1px solid var(--border-light)'}}>
-                <div style={{marginBottom:'20px'}}>
-                    <input type="text" placeholder="Your Name" style={{width:'100%', padding:'15px', background:'transparent', border:'1px solid #333', color:'white', borderRadius:'4px'}} />
+                {/* Name Input with Floating Label */}
+                <div className="input-group">
+                    <input type="text" className="form-input" placeholder=" " required />
+                    <label className="form-label">Your Name</label>
                 </div>
-                <div style={{marginBottom:'20px'}}>
-                    <input type="email" placeholder="Your Email" style={{width:'100%', padding:'15px', background:'transparent', border:'1px solid #333', color:'white', borderRadius:'4px'}} />
+                
+                {/* Email Input with Floating Label */}
+                <div className="input-group">
+                    <input type="email" className="form-input" placeholder=" " required />
+                    <label className="form-label">Your Email</label>
                 </div>
-                <div style={{marginBottom:'20px'}}>
-                    <textarea rows="4" placeholder="Message" style={{width:'100%', padding:'15px', background:'transparent', border:'1px solid #333', color:'white', borderRadius:'4px'}}></textarea>
+                
+                {/* Message Input with Floating Label */}
+                <div className="input-group">
+                    <textarea rows="4" className="form-input" placeholder=" " required></textarea>
+                    <label className="form-label">Message</label>
                 </div>
-                <button style={{width:'100%', padding:'15px', background:'var(--primary)', border:'none', fontWeight:'bold', cursor:'pointer', borderRadius:'4px'}}>Send Message</button>
+                
+                <button className="btn-primary" style={{width:'100%', padding:'15px', background:'var(--primary)', border:'none', fontWeight:'bold', cursor:'pointer', borderRadius:'4px'}}>Send Message</button>
             </form>
         </div>
       </section>
@@ -266,9 +279,9 @@ function App() {
         
         <div style={{ borderTop:'1px solid #222', paddingTop:'30px', marginTop:'30px' }}>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '20px' }}>
-            <a href="#" style={{ fontSize: '1.5rem', color: 'white', border:'1px solid #333', padding:'10px', borderRadius:'50%', width:'50px', height:'50px', display:'flex', alignItems:'center', justifyContent:'center' }}><i className="fab fa-instagram"></i></a>
-            <a href="#" style={{ fontSize: '1.5rem', color: 'white', border:'1px solid #333', padding:'10px', borderRadius:'50%', width:'50px', height:'50px', display:'flex', alignItems:'center', justifyContent:'center' }}><i className="fab fa-facebook-f"></i></a>
-            <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" style={{ fontSize: '1.5rem', color: 'white', border:'1px solid #333', padding:'10px', borderRadius:'50%', width:'50px', height:'50px', display:'flex', alignItems:'center', justifyContent:'center' }}><i className="fab fa-youtube"></i></a>
+            <a href="#" className="social-icon"><i className="fab fa-instagram"></i></a>
+            <a href="#" className="social-icon"><i className="fab fa-facebook-f"></i></a>
+            <a href="https://youtube.com/@mr.rinkuinfra" target="_blank" className="social-icon"><i className="fab fa-youtube"></i></a>
             </div>
             <p style={{ color: '#666', fontSize:'0.9rem' }}>&copy; 2025 Mr Rinku Infra. All rights reserved.</p>
         </div>
